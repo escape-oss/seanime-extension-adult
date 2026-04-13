@@ -1,0 +1,11 @@
+{
+  "id": "seanime-hentaihaven-provider",
+  "name": "HentaiHaven",
+  "description": "Direct streaming for HentaiHaven",
+  "version": "1.0.2",
+  "author": "Community",
+  "type": "onlinestream-provider",
+  "language": "javascript",
+  "lang": "en",
+  "payload": "class Provider { getSettings() { return { episodeServers: ['Default'], supportsDub: false }; } async search(opts) { const res = await fetch(`https://hentaihaven.com/?s=${encodeURIComponent(opts.query)}`); const html = await res.text(); const $ = LoadDoc(html); const results = []; $('.post-item').each((_, el) => { results.push({ id: $(el).find('a').attr('href'), title: $(el).find('.post-title').text().trim(), url: $(el).find('a').attr('href'), subOrDub: 'sub' }); }); return results; } async findEpisodes(id) { return [{ id: id, number: 1, title: 'OVA / Movie', url: id }]; } async findEpisodeServer(episode) { const res = await fetch(episode.id); const html = await res.text(); const videoUrlMatch = html.match(/source src=\"(.*?)\"/); const videoUrl = videoUrlMatch ? videoUrlMatch[1] : ''; return { server: 'Default', videoSources: [{ url: videoUrl, type: 'mp4', quality: '720p' }] }; } }"
+}
