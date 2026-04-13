@@ -7,5 +7,5 @@
   "type": "onlinestream-provider",
   "language": "javascript",
   "lang": "en",
-  "payloadURI": "provider.js" 
+  "payloadURI": "https://raw.githubusercontent.com/escape-oss/seanime-extension-adult/refs/heads/main/hentaicity/hentaicity/provider.js" 
 }
