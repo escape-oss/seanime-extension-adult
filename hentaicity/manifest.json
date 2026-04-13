@@ -1,0 +1,11 @@
+{
+  "id": "seanime-hentaicity-provider",
+  "name": "HentaiCity",
+  "description": "Streaming provider for HentaiCity",
+  "version": "1.0.0",
+  "author": "Community",
+  "type": "onlinestream-provider",
+  "language": "javascript",
+  "lang": "en",
+  "payloadURI": "provider.js" 
+}
