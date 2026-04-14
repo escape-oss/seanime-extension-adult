@@ -1,11 +1,10 @@
 {
-  "id": "seanime-hentaihaven-provider",
-  "name": "HentaiHaven",
-  "description": "Direct streaming for HentaiHaven",
-  "version": "1.0.2",
+  "id": "seanime-hentaicity",
+  "name": "HentaiCity",
+  "version": "1.2.1",
   "author": "Community",
   "type": "onlinestream-provider",
   "language": "javascript",
   "lang": "en",
-  "payload": "class Provider { getSettings() { return { episodeServers: ['Default'], supportsDub: false }; } async search(opts) { const res = await fetch(`https://hentaihaven.com/?s=${encodeURIComponent(opts.query)}`); const html = await res.text(); const $ = LoadDoc(html); const results = []; $('.post-item').each((_, el) => { results.push({ id: $(el).find('a').attr('href'), title: $(el).find('.post-title').text().trim(), url: $(el).find('a').attr('href'), subOrDub: 'sub' }); }); return results; } async findEpisodes(id) { return [{ id: id, number: 1, title: 'OVA / Movie', url: id }]; } async findEpisodeServer(episode) { const res = await fetch(episode.id); const html = await res.text(); const videoUrlMatch = html.match(/source src=\"(.*?)\"/); const videoUrl = videoUrlMatch ? videoUrlMatch[1] : ''; return { server: 'Default', videoSources: [{ url: videoUrl, type: 'mp4', quality: '720p' }] }; } }"
+  "payload": "class Provider { getSettings() { return { episodeServers: ['Default'], supportsDub: false }; } async search(opts) { const res = await fetch(`https://www.hentaicity.com/search?keyword=${encodeURIComponent(opts.query)}`); const html = await res.text(); const $ = LoadDoc(html); const results = []; $('.video-item').each((_, el) => { const a = $(el).find('a').first(); results.push({ id: a.attr('href'), title: $(el).find('.title').text().trim(), url: `https://www.hentaicity.com${a.attr('href')}`, subOrDub: 'sub' }); }); return results; } async findEpisodes(id) { return [{ id: id, number: 1, title: 'Full Movie', url: `https://www.hentaicity.com${id}` }]; } async findEpisodeServer(episode) { const res = await fetch(episode.url); const html = await res.text(); const videoMatch = html.match(/file: \"(.*?)\"/i) || html.match(/source src=\\\"(.*?)\\\"/i); const videoUrl = videoMatch ? videoMatch[1].replace(/\\\\/g, '') : ''; return { server: 'Default', videoSources: [{ url: videoUrl, type: videoUrl.includes('m3u8') ? 'm3u8' : 'mp4', quality: '720p' }] }; } }"
 }
