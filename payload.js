@@ -7,13 +7,11 @@ class Provider {
     }
 
     async search(opts) {
-        // Hentai.tv uses a simple search query
         const res = await fetch(`https://hentai.tv/search/?query=${encodeURIComponent(opts.query)}`);
         const html = await res.text();
         const $ = LoadDoc(html);
         const results = [];
 
-        // Selecting based on the site's grid structure
         $('.video-item').each((_, el) => {
             const a = $(el).find('a').first();
             const title = $(el).find('.title').text().trim();
@@ -45,7 +43,6 @@ class Provider {
         const res = await fetch(episode.url);
         const html = await res.text();
         
-        // Hentai.tv often hides the video in a <source> tag or script
         const videoMatch = html.match(/<source.*?src=["'](.*?)["']/i) || 
                            html.match(/file["']?\s*:\s*["'](.*?)["']/i);
         
@@ -53,6 +50,10 @@ class Provider {
 
         return {
             server: 'Primary',
+            headers: {
+                'Referer': 'https://hentai.tv/',
+                'User-Agent': 'Mozilla/5.0'
+            },
             videoSources: [{
                 url: videoUrl,
                 type: videoUrl.includes('m3u8') ? 'm3u8' : 'mp4',
